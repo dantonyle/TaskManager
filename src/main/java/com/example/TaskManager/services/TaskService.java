@@ -47,7 +47,7 @@ public class TaskService {
 		taskRepository.delete(task);
 	}
 	
-	public boolean updateTask(Integer id, Date startdate, Date enddate, String description, String email, String severity) {
+	public boolean updateTaskWithId(Integer id, Date startdate, Date enddate, String description, String email, String severity) {
 		
 		
 		Task task = taskRepository.getTaskById(id);

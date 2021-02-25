@@ -27,6 +27,7 @@
 </form>
 
 <form action="register" method="get">
+	<br>
 	<a href="register_New"><button name="register_Btn">Register New User</button></a>
 </form>
 

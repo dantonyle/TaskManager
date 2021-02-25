@@ -13,62 +13,75 @@
 	crossorigin="anonymous">
 <!-- Start Styles. Move the 'style' tags and everything between them to between the 'head' tags -->
 <style type="text/css">
-.myTable { background-color:#eee;border-collapse:collapse; }
-.myTable th { background-color:#808;color:white;width:50%; }
-.myTable td, .myTable th { padding:5px;border:1px solid #000; }
+.myTable {
+	background-color: #fff;
+	border-collapse: collapse;
+}
+
+.myTable th {
+	background-color: #555;
+	color: white;
+	width: 50%;
+}
+
+.myTable td, .myTable th {
+	padding: 5px;
+	border: 1px solid #000;
+}
 </style>
 <!-- End Styles -->
 
 </head>
 <body>
 
-
-	<h3>Welcome ${username} to your task manager!!!</h3>
-	<h5>View your tasks here</h5>
+	<h3>Task Manager</h3>
+	<h3>User: <font color="blue">${username}</font></h3>
+	<h5 align="center">View your tasks here</h5>
 
 	<c:forEach var="task" items="${tasks}">
 		<table class="myTable">
 			<tr>
-				<th style="padding: 0 15px 0 15px;">Start Date</th>
-				<th style="padding: 0 15px 0 15px;">End Date</th>
 				<th style="padding: 0 15px 0 15px;">Description</th>
 				<th style="padding: 0 15px 0 15px;">Email</th>
 				<th style="padding: 0 15px 0 15px;">Severity</th>
+				<th style="padding: 0 15px 0 15px;">Start Date</th>
+				<th style="padding: 0 15px 0 15px;">End Date</th>
+				<th style="padding: 0 15px 0 15px;">Click to Edit</th>
+				<th style="padding: 0 15px 0 15px;">Click to Complete</th>
+				
 			</tr>
 			<tr>
-				<td style="padding: 0 15px 0 15px;">${task.startDate}</td>
-				<td style="padding: 0 15px 0 15px;">${task.endDate}</td>
 				<td style="padding: 0 15px 0 15px;">${task.description}</td>
 				<td style="padding: 0 15px 0 15px;">${task.email}</td>
 				<td style="padding: 0 15px 0 15px;">${task.severity}</td>
+				<td style="padding: 0 15px 0 15px;">${task.startDate}</td>
+				<td style="padding: 0 15px 0 15px;">${task.endDate}</td>
+				<td style="padding: 0 15px 0 15px;">
+					<form method='POST' action="edit-this-task">
+						<input type="hidden" id="id" name="id" value="${task.id}">
+						<button type="submit" style="width: 80px;">Edit</button>
+					</form>
+				</td>
+				<td style="padding: 0 15px 0 15px;">
+					<form method='POST' action="complete-task">
+						<input type="hidden" id="id" name="id" value="${task.id}">
+						<button
+							onclick="return confirm('Is this task completed? ')"
+							type="submit" style="width: 80px;">Complete</button>
+					</form>
+				</td>
 			</tr>
 		</table>
-		<form method='POST' action="edit-task">
-			<input type="hidden" name="id" value="${task.id}">
-			<button type="submit">edit</button>
-		</form>
-		<form method='POST' action="complete-task">
-			<input type="hidden" name="id" value="${task.id}">
-			<button
-				onclick="return confirm('Completing will delete the task, is that ok?')"
-				type="submit">complete</button>
-		</form>
 	</c:forEach>
-	<br>
 	<hr>
-	<h2>Add a new task:</h2>
+	<h3>Add a new task:</h3>
 	<form action="addTask" method='POST'>
-		<br>
 		<h3>
 			<font color="red">${taskError}</font>
 		</h3>
-		<input type="hidden" id="username" name="username" value="${username}"><br>
-		<br> <label style="padding: 0 11px 0 12px;" for="startDate"><b>Startdate:</b></label>
-		<input type="date" id="startdate" name="startdate" required> <label
-			style="padding: 0 15px 0 14px;" for=enddate><b>Enddate:</b></label> <input
-			type="date" id="enddate" name="enddate" required><br> <label
-			style="padding: 0 4px 0 4px;" for="description"><b>Description:</b></label>
-		<input type="text" id="description" name="description" required><br>
+		<input type="hidden" id="username" name="username" value="${username}"><br><br> 
+		<label style="padding: 0 4px 0 4px;" for="description"><b>Description:</b></label>
+		<input type="text" id="description" name="description" style="width: 500px;" required><br>
 		<label style="padding: 0 23px 0 23px;" for="email"><b>Email:</b></label>
 		<input type="text" id="email" name="email" required><br>
 		<label style="padding: 0 16px 0 15px;" for="severity"><b>Severity:</b>
@@ -76,7 +89,11 @@
 			<option value="low" selected>low</option>
 			<option value="active">active</option>
 			<option value="critical">critical</option>
-		</select>
+		</select><br>
+		<label style="padding: 0 11px 0 12px;" for="startDate"><b>Startdate:</b></label>
+		<input type="date" id="startdate" name="startdate" required> 
+		<label style="padding: 0 15px 0 14px;" for=enddate><b>Enddate:</b></label> 
+		<input type="date" id="enddate" name="enddate" required><br> 
 		<button type="submit" class="btn btn-primary btn-block">submit</button>
 
 		<br>

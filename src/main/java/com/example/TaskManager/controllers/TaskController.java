@@ -51,39 +51,55 @@ public class TaskController {
 		return "display-tasks";
 	}
     
-    @RequestMapping(value="/edit-task")
-    public String editTask(ModelMap model, @RequestParam("id") Integer id) {
-    	
+    
+    @RequestMapping(value="/edit-this-task")
+    public String showEditTask(ModelMap model, @RequestParam("id") Integer id) {
     	Task task = taskService.getTaskById(id);
-    	model.put("task.id", id);
-    	model.put("task.username", task.getUsername());
-    	model.put("task.startDate", task.getStartDate());
-    	model.put("task.endDate", task.getEndDate());
-    	model.put("task.description", task.getDescription());
-    	model.put("task.severity", task.getSeverity());
-    	model.put("task.email", task.getEmail());
-    	
-    	return "edit-task";
+		model.addAttribute("task", task);
+		return "edit-task";
     }
     
+    @RequestMapping(value="/edit-task")
+	public String editTask(ModelMap model,  @RequestParam("id") Integer id) {
+    	Task task = taskService.getTaskById(id);
+    	model.addAttribute("task", task);
+		return "edit-task";
+	}
+    
+    
     @RequestMapping(value="/update-task")
-    public String updateTask(ModelMap model, @RequestParam("id") Integer id, @RequestParam("username") String username, @RequestParam("startdate") Date startDate, @RequestParam("enddate") Date endDate,
+    public String updateTask(ModelMap model, @RequestParam("id")Integer id, @RequestParam("startdate") Date startDate, @RequestParam("enddate") Date endDate,
 			  @RequestParam("description") String description, @RequestParam("email") String email, 
 			  @RequestParam("severity") String severity) throws ParseException {
-    
     	
-    	boolean updated = taskService.updateTask( id, startDate, endDate, description, email, severity);
+    	Task task = taskService.getTaskById(id);
+    	
+    	boolean updated = taskService.updateTaskWithId( id, startDate, endDate, description, email, severity);
 		
 		if (!updated) {
-			model.put("username", username);
-			model = showUserTasks(model, username);
+			model.put("username", task.getUsername());
+			model = showUserTasks(model, task.getUsername());
 			model.put("error", "Task Save was unsuccessful");
 			return "display-tasks";
 		}
-		model.put("username", username);
-		model = showUserTasks(model, username);
+		
+		model.put("username", task.getUsername());
+		model = showUserTasks(model, task.getUsername());
 		return "display-tasks";
     }
     
+    @RequestMapping(value="/complete-task")
+    public String completeTask(ModelMap model, @RequestParam("id") Integer id) {
+    	
+    	
+    	
+    	Task task = taskService.getTaskById(id);
+    	String username = task.getUsername();
+    	taskService.DeleteTask(task);
+    	
+    	model.put("username", username);
+		model = showUserTasks(model, username);
+    	return "display-tasks";
+    }
     
 }

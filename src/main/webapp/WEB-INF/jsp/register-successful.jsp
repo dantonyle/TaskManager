@@ -14,7 +14,7 @@
 
 <p id="para1" class="center large">Registered Successfully</p>
 <form action="login" method="get">
-	<button >Got to Login</button></a>
+	<a><button >Go to Login</button></a>
 </form>
 
 </body>
